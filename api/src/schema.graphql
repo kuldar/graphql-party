@@ -1,0 +1,19 @@
+# import Link from "./generated/prisma.graphql"
+
+type Query {
+  links: [Link!]!
+  link(id: ID!): Link
+  # me: User
+}
+
+# type User {
+#   id: ID!
+#   name: String!
+#   email: String!
+#   imageUrl: String!
+# }
+
+# type AuthPayload {
+#   token: String!
+#   user: User!
+# }

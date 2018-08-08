@@ -1,0 +1,28 @@
+{
+  "version": "1.0.0",
+  "name": "graphql-party-api",
+  "author": "Kuldar Kalvik",
+  "scripts": {
+    "start": "nodemon -e js,graphql -x node -r dotenv/config src/index.js dotenv_config_path=.env.development",
+    "debug": "nodemon -e js,graphql -x node --inspect -r dotenv/config src/index.js",
+    "deploy": "prisma deploy -e .env.development"
+  },
+  "dependencies": {
+    "graphql-yoga": "1.14.12",
+    "prisma-binding": "^2.1.1",
+    "bcryptjs": "2.4.3",
+    "jsonwebtoken": "8.3.0"
+  },
+  "devDependencies": {
+    "babel-preset-env": "^1.7.0",
+    "dotenv": "6.0.0",
+    "nodemon": "1.18.3",
+    "graphql-cli": "^2.16.4",
+    "prisma": "1.12.0"
+  },
+  "babel": {
+    "presets": [
+      "env"
+    ]
+  }
+}

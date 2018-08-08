@@ -1,0 +1,9 @@
+{
+  "name": "graphql-party-api",
+  "alias": "api.graphql.party",
+  "dotenv": ".env.production",
+  "scale": {
+    "sfo1": { "min": 1, "max": "auto" },
+    "bru1": { "min": 1, "max": "auto" }
+  }
+}

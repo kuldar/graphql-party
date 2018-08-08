@@ -1,0 +1,60 @@
+type User {
+  id: ID! @unique
+  name: String!
+  email: String! @unique
+  imageUrl: String
+
+  links: [Link!]!
+  likes: [Like!]!
+  comments: [Comment!]!
+
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Tag {
+  id: ID! @unique
+  slug: String! @unique
+  title: String!
+  oneliner: String!
+  imageUrl: String!
+
+  links: [Link!]!
+}
+
+type Link {
+  id: ID! @unique
+  slug: String! @unique
+  url: String!
+  title: String!
+  oneliner: String!
+  description: String
+  readmeUrl: String
+
+  author: User!
+  tags: [Tag!]!
+  likes: [Like!]!
+  comments: [Comment!]!
+
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Like {
+  id: ID! @unique
+
+  link: Link!
+  user: User!
+
+  createdAt: DateTime!
+}
+
+type Comment {
+  id: ID! @unique
+
+  link: Link!
+  author: User!
+  text: String
+
+  createdAt: DateTime!
+}
