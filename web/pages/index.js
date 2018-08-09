@@ -13,9 +13,6 @@ import LinkList from '../components/Link/LinkList'
 import Nachos from '../assets/Nachos'
 import { site } from '../utils/variables'
 
-// Dummy data
-// import { links } from '../utils/data'
-
 // Index
 class Index extends Component {
 

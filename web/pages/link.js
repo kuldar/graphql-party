@@ -11,9 +11,6 @@ import LinkCard from '../components/Link/LinkCard'
 import Nachos from '../assets/Nachos'
 import { site } from '../utils/variables'
 
-// Dummy data
-import { links } from '../utils/data'
-
 // Link
 class Link extends Component {
 

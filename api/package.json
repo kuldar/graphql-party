@@ -3,7 +3,8 @@
   "name": "graphql-party-api",
   "author": "Kuldar Kalvik",
   "scripts": {
-    "start": "nodemon -e js,graphql -x node -r dotenv/config src/index.js dotenv_config_path=.env.development",
+    "dev": "nodemon -e js,graphql -x node -r dotenv/config src/index.js dotenv_config_path=.env.development",
+    "start": "nodemon -e js,graphql -x node -r dotenv/config src/index.js",
     "debug": "nodemon -e js,graphql -x node --inspect -r dotenv/config src/index.js",
     "deploy": "prisma deploy -e .env.development"
   },

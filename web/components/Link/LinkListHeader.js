@@ -2,9 +2,6 @@
 import styled from 'styled-components'
 import { darken } from 'polished'
 
-// Locals
-// import LinkRow from './LinkRow'
-
 // Link List Header
 const LinkListHeader = () => (
   <Padding>

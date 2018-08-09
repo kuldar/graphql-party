@@ -7,9 +7,7 @@ const Footer = () => {
   return (
     <Container>
       <FooterLink href="https://twitter.com/kkuldar">
-        by
-        <img src='https://cdn.pbrd.co/images/HupyS9O.png' />
-        Kuldar
+        by <img src='https://cdn.pbrd.co/images/HupyS9O.png' /> Kuldar
       </FooterLink>
     </Container>
   )
