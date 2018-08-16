@@ -9,49 +9,29 @@ import Header from '../components/shared/Header'
 import Footer from '../components/shared/Footer'
 import Modal from '../components/shared/Modal'
 import { SocialMeta } from '../components/shared/SocialMeta'
-import LinkList from '../components/Link/LinkList'
+import TagLinkList from '../components/Tag/TagLinkList'
 import Nachos from '../assets/Nachos'
 import { site } from '../utils/variables'
 
-// Index
-class Index extends Component {
+// Tag
+class Tag extends Component {
 
   static getInitialProps ({ query: { id } }) {
-    return { linkId: id }
+    return { tagId: id }
   }
 
   constructor (props) {
     super(props)
-    this.onKeyDown = this.onKeyDown.bind(this)
   }
 
-  componentDidMount() { document.addEventListener('keydown', this.onKeyDown) }
-  componentWillUnmount() { document.removeEventListener('keydown', this.onKeyDown) }
-
-  // Close on Esc
-  onKeyDown(e) {
-    if (!this.props.linkId) return
-    if (e.keyCode === 27) { this.props.router.back() }
-  }
-
-  dismissModal() {
-    this.props.router.back()
-  }
-
-  render() {
-    const { linkId } = this.props
+  render () {
+    const { tagId } = this.props
 
     return (
       <Fragment>
-        { linkId &&
-          <Modal
-            linkId={linkId}
-            onDismiss={() => this.dismissModal()} />
-        }
         <Head>
           <title>{site.title}</title>
           <SocialMeta />
-          <style>{ linkId && 'body {overflow: hidden;}' }</style>
         </Head>
 
         <Container>
@@ -59,9 +39,9 @@ class Index extends Component {
             <Header />
           </HeaderContainer>
 
-          <LinkListContainer>
-            <LinkList />
-          </LinkListContainer>
+          <TagLinkListContainer>
+            <TagLinkList tagId={tagId} />
+          </TagLinkListContainer>
 
           <FooterContainer>
             <Footer />
@@ -94,7 +74,7 @@ const FooterContainer = styled.div`
   z-index: 1;
 `
 
-const LinkListContainer = styled.div`
+const TagLinkListContainer = styled.div`
   position: relative;
   z-index: 1;
 `
@@ -106,4 +86,4 @@ const NachosContainer = styled.div`
   z-index: 0;
 `
 
-export default withRouter(Index)
+export default withRouter(Tag)

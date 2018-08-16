@@ -1,7 +1,6 @@
 import React from 'react'
 import App, { Container } from 'next/app'
 import { ApolloProvider } from 'react-apollo'
-// import Router from 'next/router'
 import { ThemeProvider } from 'styled-components'
 
 // Local

@@ -10,25 +10,34 @@ import LinkVote from './LinkVote'
 const LinkRow = ({ link }) => {
 
   const showLink = (e, id) => {
-    e.preventDefault()
-    Router.push(`/?id=${id}`, `/link/${id}`)
+    if (e.target.tagName.toLowerCase() !== 'object') {
+      Router.push(`/?id=${id}`, `/link/${id}`)
+    }
   }
+
+  const { id, likes, isVoted, title, tags, oneliner, comments } = link
 
   return (
     <LinkContainer>
       <Link
-        key={link.id}
-        href={`/link/${link.id}`}
-        onClick={(e) => showLink(e, link.id)}>
-        <LinkVote votesCount={link.likes.length} isVoted={link.isVoted} />
+        onClick={(e) => showLink(e, id)}
+        href={`/link/${id}`}>
+        <object type="nested/link">
+          <LinkVote
+            linkId={id}
+            votesCount={likes.length}
+            isVoted={isVoted} />
+        </object>
         <LinkContent>
           <Top>
-            <Title>{link.title}</Title>
-            <Tags>{ link.tags.map((tag, i)=> <Tag key={i}>#{tag.slug}</Tag>) }</Tags>
+            <Title>{title}</Title>
+            <object type="nested/link">
+              <Tags>{ tags.map((tag, i)=> <Tag key={i} href={`/tag/${tag.slug}`}>#{tag.slug}</Tag>) }</Tags>
+            </object>
           </Top>
           <Bottom>
-            <OneLiner>{link.oneliner}</OneLiner>
-            <Comments>{link.comments.length > 0 && `${link.comments.length} ${link.comments.length === 1 ? 'comment' : 'comments'}`}</Comments>
+            <OneLiner>{oneliner}</OneLiner>
+            <Comments>{comments.length > 0 && `${comments.length} ${comments.length === 1 ? 'comment' : 'comments'}`}</Comments>
           </Bottom>
         </LinkContent>
       </Link>
@@ -51,9 +60,12 @@ const Link = styled.a`
   display: flex;
   padding: 1.5rem 0.25rem;
   border-bottom: 1px solid ${p => p.theme.gray4};
+
+  &:hover { cursor: pointer; }
 `
 
 const LinkContent = styled.div`
+  display: block;
   flex: 1;
 `
 
@@ -67,7 +79,7 @@ const Bottom = styled.div`
   justify-content: space-between;
 `
 
-const Title = styled.h3`
+const Title = styled.h2`
   margin: 0;
   font-weight: 500;
   font-size: 1.25rem;
@@ -77,7 +89,7 @@ const Title = styled.h3`
 
 const Tags = styled.div``
 
-const Tag = styled.div`
+const Tag = styled.a`
   display: inline-block;
   transition: ${p => p.theme.transition};
   color: ${p => p.theme.gray3};
@@ -93,16 +105,12 @@ const Tag = styled.div`
 const OneLiner = styled.div`
   font-size: 1rem;
   line-height: 1.25rem;
+  &:hover { cursor: pointer; }
 `
 
 const Comments = styled.div`
   transition: ${p => p.theme.transition};
   color: ${p => p.theme.gray3};
-
-  &:hover {
-    cursor: pointer;
-    color: ${p => darken(0.2, p.theme.gray3)};
-  }
 `
 
 export default LinkRow

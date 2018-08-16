@@ -16,6 +16,7 @@ type Tag {
   id: ID! @unique
   slug: String! @unique
   title: String!
+  color: String
   oneliner: String!
   imageUrl: String!
 

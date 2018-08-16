@@ -1,5 +1,5 @@
 # source: https://eu1.prisma.sh/kuldar/graphql-party/development
-# timestamp: Sat Jul 21 2018 23:04:31 GMT+0200 (CEST)
+# timestamp: Thu Aug 16 2018 08:45:32 GMT+0200 (CEST)
 
 type AggregateComment {
   count: Int!
@@ -1313,6 +1313,7 @@ type Tag implements Node {
   id: ID!
   slug: String!
   title: String!
+  color: String
   oneliner: String!
   imageUrl: String!
   links(where: LinkWhereInput, orderBy: LinkOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Link!]
@@ -1331,6 +1332,7 @@ type TagConnection {
 input TagCreateInput {
   slug: String!
   title: String!
+  color: String
   oneliner: String!
   imageUrl: String!
   links: LinkCreateManyWithoutTagsInput
@@ -1344,6 +1346,7 @@ input TagCreateManyWithoutLinksInput {
 input TagCreateWithoutLinksInput {
   slug: String!
   title: String!
+  color: String
   oneliner: String!
   imageUrl: String!
 }
@@ -1364,6 +1367,8 @@ enum TagOrderByInput {
   slug_DESC
   title_ASC
   title_DESC
+  color_ASC
+  color_DESC
   oneliner_ASC
   oneliner_DESC
   imageUrl_ASC
@@ -1378,6 +1383,7 @@ type TagPreviousValues {
   id: ID!
   slug: String!
   title: String!
+  color: String
   oneliner: String!
   imageUrl: String!
 }
@@ -1424,6 +1430,7 @@ input TagSubscriptionWhereInput {
 input TagUpdateInput {
   slug: String
   title: String
+  color: String
   oneliner: String
   imageUrl: String
   links: LinkUpdateManyWithoutTagsInput
@@ -1441,6 +1448,7 @@ input TagUpdateManyWithoutLinksInput {
 input TagUpdateWithoutLinksDataInput {
   slug: String
   title: String
+  color: String
   oneliner: String
   imageUrl: String
 }
@@ -1585,6 +1593,46 @@ input TagWhereInput {
 
   """All values not ending with the given string."""
   title_not_ends_with: String
+  color: String
+
+  """All values that are not equal to given value."""
+  color_not: String
+
+  """All values that are contained in given list."""
+  color_in: [String!]
+
+  """All values that are not contained in given list."""
+  color_not_in: [String!]
+
+  """All values less than the given value."""
+  color_lt: String
+
+  """All values less than or equal the given value."""
+  color_lte: String
+
+  """All values greater than the given value."""
+  color_gt: String
+
+  """All values greater than or equal the given value."""
+  color_gte: String
+
+  """All values containing the given string."""
+  color_contains: String
+
+  """All values not containing the given string."""
+  color_not_contains: String
+
+  """All values starting with the given string."""
+  color_starts_with: String
+
+  """All values not starting with the given string."""
+  color_not_starts_with: String
+
+  """All values ending with the given string."""
+  color_ends_with: String
+
+  """All values not ending with the given string."""
+  color_not_ends_with: String
   oneliner: String
 
   """All values that are not equal to given value."""

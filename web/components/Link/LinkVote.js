@@ -4,16 +4,22 @@ import styled from 'styled-components'
 // Locals
 import Arrow from '../../assets/Arrow'
 
+const toggleVote = (e, linkId) => {
+  console.log({linkId})
+}
+
 // Link Vote
-const LinkVote = ({ votesCount, isVoted }) => (
-  <Container isVoted={isVoted}>
+const LinkVote = ({ votesCount, isVoted, linkId }) => (
+  <Container
+    isVoted={isVoted}
+    onClick={(e) => toggleVote(e, linkId)}>
     <ArrowContainer><Arrow /></ArrowContainer>
     <Count>{votesCount}</Count>
   </Container>
 )
 
 // Styles
-const Container = styled.div`
+const Container = styled.a`
   transition: all .15s ease;
   display: flex;
   align-items: center;
@@ -24,7 +30,7 @@ const Container = styled.div`
   background-image: ${p => p.isVoted ? p.theme.purpleToBlue : 'none' };
   color: ${p => p.isVoted ? p.theme.white : p.theme.gray3 };
   border-radius: ${p => p.theme.radius};
-  min-width: 2.5rem;
+  min-width: 2rem;
   margin-right: 1rem;
 
   &:hover {

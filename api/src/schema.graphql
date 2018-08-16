@@ -1,8 +1,11 @@
-# import Link from "./generated/prisma.graphql"
+# import Link, Tag from "./generated/prisma.graphql"
 
 type Query {
   links: [Link!]!
   link(id: ID!): Link
+
+  tags: [Tag!]!
+  tag(id: ID!): Tag
   # me: User
 }
 

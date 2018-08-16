@@ -1,32 +1,43 @@
 // Libraries
-const { createServer } = require('http')
-const { parse } = require('url')
 const next = require('next')
-const pathMatch = require('path-match')
+const { createServer } = require('http')
+const express = require('express')
 
 const port = parseInt(process.env.PORT, 10) || 3000
-const dev = process.env.NODE_ENV !== 'production'
-const app = next({ dev })
+const app = next({ dev: process.env.NODE_ENV !== 'production' })
+
 const handle = app.getRequestHandler()
-const route = pathMatch()
-const match = route('/link/:id')
 
 app.prepare()
   .then(() => {
-    createServer((req, res) => {
-      const { pathname, query } = parse(req.url, true)
-      const params = match(pathname)
-      if (params === false) {
-        handle(req, res)
-        return
-      }
-      // assigning `query` into the params means that we still
-      // get the query string passed to our application
-      // i.e. /link/foo?show-comments=true
-      app.render(req, res, '/link', Object.assign(params, query))
+    const server = express()
+
+    server.get('/', (req, res) => {
+      return app.render(req, res, '/links', req.query)
     })
-      .listen(port, (err) => {
-        if (err) throw err
-        console.log(`> Ready on http://localhost:${port}`)
-      })
+
+    server.get('/link/new', (req, res) => {
+      return app.render(req, res, '/newLink', req.query)
+    })
+
+    server.get('/link/:id', (req, res) => {
+      return app.render(req, res, '/link', { id: req.params.id })
+    })
+
+    server.get('/tags', (req, res) => {
+      return app.render(req, res, '/tags', req.query)
+    })
+
+    server.get('/tag/:id', (req, res) => {
+      return app.render(req, res, '/tag', { id: req.params.id })
+    })
+
+    server.get('*', (req, res) => {
+      return handle(req, res)
+    })
+
+    server.listen(port, (err) => {
+      if (err) throw err
+      console.log(`> Ready on http://localhost:${port}…`)
+    })
   })

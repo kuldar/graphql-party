@@ -67,7 +67,7 @@ class LinkCard extends Component {
                     <LinkTitle>{link.title}</LinkTitle>
 
                     <LinkTags>
-                      { link.tags.map(tag => <LinkTag key={tag.id}>#{tag.slug}</LinkTag>) }
+                      { link.tags.map(tag => <LinkTag key={tag.id} href={`/tag/${tag.id}`}>#{tag.slug}</LinkTag>) }
                     </LinkTags>
                   </LinkTitleContainer>
 
@@ -100,7 +100,7 @@ class LinkCard extends Component {
                 </LinkDescription>
               }
 
-              <LinkComments>
+              <LinkComments id="comments">
 
                 { link.comments.length > 0 &&
                   link.comments.map(comment =>
@@ -190,7 +190,7 @@ const LinkVote = styled.div`
   color: ${p => p.isVoted ? p.theme.white : p.theme.gray3 };
   border-radius: ${p => p.theme.radius};
   box-shadow: ${p => p.theme.boxShadow};
-  min-width: 2.5rem;
+  min-width: 3rem;
   margin-right: 1.5rem;
 
   &:hover {
@@ -242,7 +242,7 @@ const LinkTags = styled.div`
   display: flex;
 `
 
-const LinkTag = styled.div`
+const LinkTag = styled.a`
   color: ${p => p.theme.white};
   opacity: 0.6;
   font-size: 1.125rem;

@@ -4,15 +4,5 @@ import ApolloClient from 'apollo-boost'
 
 // With Apollo
 export default withApollo(({ headers }) => (
-
-  new ApolloClient({
-    uri: process.env.SERVER_URL,
-    request: operation => {
-      operation.setContext({
-        fetchOptions: { credentials: 'include' },
-        headers
-      })
-    }
-  })
-
+  new ApolloClient({ uri: 'http://localhost:4000' })
 ))

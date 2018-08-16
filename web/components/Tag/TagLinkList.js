@@ -4,19 +4,26 @@ import { Query } from 'react-apollo'
 import gql from 'graphql-tag'
 
 // Locals
-import LinkRow from './LinkRow'
+import LinkRow from '../Link/LinkRow'
+import TagLinkListHeader from './TagLinkListHeader'
 
-// Link List
-const LinkList = () => (
-  <Query query={linksQuery}>
+// Tag Link List
+const TagLinkList = ({ tagId }) => (
+  <Query
+    query={linksQuery}
+    variables={{ id: tagId }}>
     {({ loading, error, data }) => {
       if (loading) return <div>Loading…</div>
       if (error) return <div>Error!</div>
 
-      const { links } = data
+      const { id, slug, title, oneliner, imageUrl, links } = data.tag
 
       return (
         <Card>
+          <TagLinkListHeader
+            title={title}
+            oneliner={oneliner}
+            imageUrl={imageUrl} />
           <List>
             { links && links.map((link, i) => <LinkRow link={link} key={i} />) }
           </List>
@@ -35,27 +42,34 @@ const Card = styled.div`
 const List = styled.div``
 
 export const linksQuery = gql`
-  query LinksQuery {
-    links {
+  query TagLinksQuery($id: ID!) {
+    tag(id: $id) {
       id
       slug
-      url
       title
       oneliner
-      description
-      tags {
+      imageUrl
+      links {
         id
         slug
+        url
+        title
+        oneliner
+        description
+        tags {
+          id
+          slug
+        }
+        likes {
+          id
+        }
+        comments {
+          id
+        }
+        createdAt
       }
-      likes {
-        id
-      }
-      comments {
-        id
-      }
-      createdAt
     }
   }
 `
 
-export default LinkList
+export default TagLinkList

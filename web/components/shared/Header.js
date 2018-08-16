@@ -14,7 +14,7 @@ const Header = () => {
       <Nav>
         <Link href='/'><NavLink isActive>Links</NavLink></Link>
         <Link href='/tags'><NavLink>Tags</NavLink></Link>
-        <Link href='/submit'><NavLink>Submit a link</NavLink></Link>
+        <Link href='/link/new' prefetch><NavLink>Submit a link</NavLink></Link>
         <Link href='https://twitter.com/graphqlparty'><NavLink>@graphqlparty</NavLink></Link>
         <UserLink>
           <UserImage src='https://cdn.pbrd.co/images/HupyS9O.png' />
