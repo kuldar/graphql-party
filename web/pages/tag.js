@@ -16,8 +16,8 @@ import { site } from '../utils/variables'
 // Tag
 class Tag extends Component {
 
-  static getInitialProps ({ query: { id } }) {
-    return { tagId: id }
+  static getInitialProps ({ query: { slug } }) {
+    return { tagSlug: slug }
   }
 
   constructor (props) {
@@ -25,7 +25,7 @@ class Tag extends Component {
   }
 
   render () {
-    const { tagId } = this.props
+    const { tagSlug } = this.props
 
     return (
       <Fragment>
@@ -40,7 +40,7 @@ class Tag extends Component {
           </HeaderContainer>
 
           <TagLinkListContainer>
-            <TagLinkList tagId={tagId} />
+            <TagLinkList tagSlug={tagSlug} />
           </TagLinkListContainer>
 
           <FooterContainer>

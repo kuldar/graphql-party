@@ -7,6 +7,8 @@ import marked from 'marked'
 import moment from 'moment'
 
 // Local
+import { Auth } from '../User/Auth'
+import LinkLike from '../Link/LinkLike'
 import Arrow from '../../assets/Arrow'
 import LinkArrow from '../../assets/LinkArrow'
 import Plus from '../../assets/Plus'
@@ -22,7 +24,7 @@ class LinkCard extends Component {
   }
 
   render() {
-    const { linkId } = this.props
+    const { linkSlug } = this.props
     const { isDescriptionExpanded } = this.state
 
     const expandDescription = (e) => {
@@ -36,104 +38,117 @@ class LinkCard extends Component {
     }
 
     return (
-      <Query
-        query={linkQuery}
-        variables={{ id: linkId }}>
-        {({ loading, error, data }) => {
-          if (loading) return <div>Loading…</div>
-          if (error) return <div>Error!</div>
+      <Auth>
+        {({ data: { me }}) => (
+          <Query
+            query={linkQuery}
+            variables={{ slug: linkSlug }}>
+            {({ loading, error, data }) => {
+              if (loading) return <div>Loading…</div>
+              if (error) return <div>Error!</div>
 
-          const { link } = data
-          const descriptionHtml = {
-            __html: marked(
-              unescape(link.description),
-              {
-                sanitize: false,
-                breaks: true
+              const { link } = data
+              const descriptionHtml = {
+                __html: marked(
+                  unescape(link.description),
+                  { sanitize: false, breaks: true }
+                )
               }
-            )
-          }
 
-          return (
-            <Card>
-              <LinkHeader>
-                <LinkVote>
-                  <ArrowContainer><Arrow /></ArrowContainer>
-                  <Count>{link.likes.length}</Count>
-                </LinkVote>
+              return (
+                <Card>
+                  <LinkHeader>
+                    <LinkLike
+                      linkSlug={linkSlug}
+                      render={({ likeLink }) => (
+                        <LikeContainer
+                          isLiked={false}
+                          onClick={likeLink}>
+                          <LikeArrowContainer><Arrow /></LikeArrowContainer>
+                          <LikeCount>{link.likes.length}</LikeCount>
+                        </LikeContainer>
+                      )} />
 
-                <LinkInfo>
-                  <LinkTitleContainer>
-                    <LinkTitle>{link.title}</LinkTitle>
+                    <LinkInfo>
+                      <LinkTitleContainer>
+                        <LinkTitle>{link.title}</LinkTitle>
 
-                    <LinkTags>
-                      { link.tags.map(tag => <LinkTag key={tag.id} href={`/tag/${tag.id}`}>#{tag.slug}</LinkTag>) }
-                    </LinkTags>
-                  </LinkTitleContainer>
+                        <LinkTags>
+                          { link.tags.map(tag => <LinkTag key={tag.id} href={`/tag/${tag.slug}`}>#{tag.slug}</LinkTag>) }
+                        </LinkTags>
+                      </LinkTitleContainer>
 
-                  <LinkOneliner>{link.oneliner}</LinkOneliner>
-                </LinkInfo>
+                      <LinkOneliner>{link.oneliner}</LinkOneliner>
+                    </LinkInfo>
 
-                <LinkViewButton href={link.url} target="_blank">
-                  View
-                  <LinkArrow />
-                </LinkViewButton>
+                    <LinkViewButton href={link.url} target="_blank">
+                      View
+                      <LinkArrow />
+                    </LinkViewButton>
 
-              </LinkHeader>
+                  </LinkHeader>
 
-              { link.description &&
-                <LinkDescription>
-                  <LinkDescriptionContent
-                    isOpen={isDescriptionExpanded}
-                    dangerouslySetInnerHTML={descriptionHtml} />
-                  {
-                    isDescriptionExpanded
-                    ? <LinkDescriptionExpandButton onClick={collapseDescription}>
-                        Collapse
-                        <Plus />
-                      </LinkDescriptionExpandButton>
-                    : <LinkDescriptionExpandButton onClick={expandDescription}>
-                        Show more
-                        <Plus />
-                      </LinkDescriptionExpandButton>
+                  { link.description &&
+                    <LinkDescription>
+                      <LinkDescriptionContent
+                        isOpen={isDescriptionExpanded}
+                        dangerouslySetInnerHTML={descriptionHtml} />
+                      {
+                        isDescriptionExpanded
+                        ? <LinkDescriptionExpandButton onClick={collapseDescription}>
+                            Collapse
+                            <Plus />
+                          </LinkDescriptionExpandButton>
+                        : <LinkDescriptionExpandButton onClick={expandDescription}>
+                            Show more
+                            <Plus />
+                          </LinkDescriptionExpandButton>
+                      }
+                    </LinkDescription>
                   }
-                </LinkDescription>
-              }
 
-              <LinkComments id="comments">
+                  <LinkComments id="comments">
 
-                { link.comments.length > 0 &&
-                  link.comments.map(comment =>
-                  <LinkComment>
-                    <LinkCommentAvatar src={comment.author.imageUrl} />
-                    <LinkCommentGroup>
-                      <LinkCommentName>{comment.author.name}</LinkCommentName>
-                      <LinkCommentBody>{comment.text}</LinkCommentBody>
-                      <LinkCommentTimeAgo>{moment(comment.createdAt).fromNow()}</LinkCommentTimeAgo>
-                    </LinkCommentGroup>
-                  </LinkComment>
-                )}
+                    { link.comments.length > 0 &&
+                      link.comments.map(comment =>
+                      <LinkComment>
+                        <LinkCommentAvatar src={comment.author.imageUrl} />
+                        <LinkCommentGroup>
+                          <LinkCommentName>{comment.author.name}</LinkCommentName>
+                          <LinkCommentBody>{comment.text}</LinkCommentBody>
+                          <LinkCommentTimeAgo>{moment(comment.createdAt).fromNow()}</LinkCommentTimeAgo>
+                        </LinkCommentGroup>
+                      </LinkComment>
+                    )}
 
-                <LinkCommentForm>
-                  <LinkCommentFormAvatar src='https://cdn.pbrd.co/images/HupyS9O.png' />
-                  <LinkCommentFormGroup>
-                    <LinkCommentFormTextarea placeholder="Got some thoughts on the link?" />
-                    <LinkCommentFormButton>Comment</LinkCommentFormButton>
-                  </LinkCommentFormGroup>
-                </LinkCommentForm>
-              </LinkComments>
-            </Card>
-          )
-        }}
-      </Query>
+                    {
+                      me &&
+                      <LinkCommentForm>
+                        { me.imageUrl
+                            ? <LinkCommentFormAvatar src={me.imageUrl} />
+                            : <LinkCommentFormInitial>{me.name.charAt(0)}</LinkCommentFormInitial>
+                        }
+                        <LinkCommentFormGroup>
+                          <LinkCommentFormTextarea placeholder="Got some thoughts on the link?" />
+                          <LinkCommentFormButton>Comment</LinkCommentFormButton>
+                        </LinkCommentFormGroup>
+                      </LinkCommentForm>
+                    }
+                  </LinkComments>
+                </Card>
+              )
+            }}
+          </Query>
+        )}
+      </Auth>
     )
   }
 }
 
 // Link Query
 export const linkQuery = gql`
-  query LinkQuery($id: ID!) {
-    link(id: $id) {
+  query LinkQuery($slug: String!) {
+    link(slug: $slug) {
       id
       slug
       url
@@ -178,16 +193,16 @@ const LinkHeader = styled.div`
   padding: 1.5rem;
 `
 
-// Link Vote
-const LinkVote = styled.div`
+// Like Container
+const LikeContainer = styled.div`
   transition: all .15s ease;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   padding: 0.5rem;
-  background: ${p => p.isVoted ? p.theme.purpleToBlue : p.theme.white };
-  color: ${p => p.isVoted ? p.theme.white : p.theme.gray3 };
+  background: ${p => p.isLiked ? p.theme.purpleToBlue : p.theme.white };
+  color: ${p => p.isLiked ? p.theme.white : p.theme.gray3 };
   border-radius: ${p => p.theme.radius};
   box-shadow: ${p => p.theme.boxShadow};
   min-width: 3rem;
@@ -195,7 +210,7 @@ const LinkVote = styled.div`
 
   &:hover {
     cursor: pointer;
-    color: ${p => p.isVoted ? p.theme.white : p.theme.purple };
+    color: ${p => p.isLiked ? p.theme.white : p.theme.purple };
     transform: translateY(-1px);
   }
 
@@ -206,11 +221,11 @@ const LinkVote = styled.div`
   }
 `
 
-const ArrowContainer = styled.div`
+const LikeArrowContainer = styled.div`
   svg { display: block; }
 `
 
-const Count = styled.div`
+const LikeCount = styled.div`
   margin-top: 0.5rem;
   font-weight: 500;
   font-size: 1.5rem;
@@ -422,6 +437,21 @@ const LinkCommentFormAvatar = styled.img`
   width: 2rem;
   border-radius: ${p => p.theme.circle};
   margin-right: 1.5rem;
+`
+
+const LinkCommentFormInitial = styled.div`
+  margin-right: 1.5rem;
+  flex-shrink: 0;
+  display: flex;
+  transition: ${p => p.theme.transition};
+  background-color: ${p => p.theme.darkBlue};
+  color: ${p => p.theme.white};
+  height: 2rem;
+  width: 2rem;
+  border-radius: ${p => p.theme.circle};
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
 `
 
 const LinkCommentFormGroup = styled.div`

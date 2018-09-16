@@ -1,20 +1,19 @@
+// const { forwardTo } = require('prisma-binding')
+
 const { Link } = require('./Link')
 const { Tag } = require('./Tag')
-// import { Authentication } from './Authentication'
-// import { Comment } from './Comment'
-// import { AuthPayload } from './AuthPayload'
+const { User } = require('./User')
+const { Like } = require('./Like')
 
 module.exports = {
   Query: {
     ...Link.Query,
     ...Tag.Query,
-    // ...Authentication.Query,
-    // ...Comment.Query
+    ...User.Query
+  },
+  Mutation: {
+    ...User.Mutation,
+    ...Link.Mutation,
+    ...Like.Mutation
   }
-  // Mutation: {
-    // ...Authentication.Mutation,
-    // ...Link.Mutation,
-    // ...Comment.Mutation
-  // },
-  // AuthPayload
 }

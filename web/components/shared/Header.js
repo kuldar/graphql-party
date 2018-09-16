@@ -1,28 +1,44 @@
 // Libraries
 import styled from 'styled-components'
+import { withRouter } from 'next/router'
 import Link from 'next/link'
 import { darken } from 'polished'
+
+import { Auth } from '../User/Auth'
+import Signout from '../User/Signout'
 
 // Locals
 import Logo from '../../assets/Logo'
 
 // Header
-const Header = () => {
-  return (
-    <Container>
-      <Link href='/'><LogoLink><Logo /></LogoLink></Link>
-      <Nav>
-        <Link href='/'><NavLink isActive>Links</NavLink></Link>
-        <Link href='/tags'><NavLink>Tags</NavLink></Link>
-        <Link href='/link/new' prefetch><NavLink>Submit a link</NavLink></Link>
-        <Link href='https://twitter.com/graphqlparty'><NavLink>@graphqlparty</NavLink></Link>
-        <UserLink>
-          <UserImage src='https://cdn.pbrd.co/images/HupyS9O.png' />
-        </UserLink>
-      </Nav>
-    </Container>
-  )
-}
+const Header = ({ router }) => (
+  <Auth>
+    {({ data: { me }}) => (
+      <Container>
+        {console.log({router})}
+        <Link href='/'><LogoLink><Logo /></LogoLink></Link>
+        { me ?
+            <Nav>
+              {/* <Link href='/tags'><NavLink isActive={ router.pathname === '/tags' }>Tags</NavLink></Link> */}
+              <Link href='/link/new' prefetch><NavLink isActive={ router.pathname === '/newLink' }>Submit a link</NavLink></Link>
+              <Link href='/profile'>
+                <UserLink>
+                  { me.imageUrl
+                      ? <UserImage src={me.imageUrl} />
+                      : <UserInitial>{me.name.charAt(0)}</UserInitial>
+                  }
+                </UserLink>
+              </Link>
+            </Nav> :
+            <Nav>
+              {/* <Link href='/tags'><NavLink isActive={ router.pathname === '/tags' }>Tags</NavLink></Link> */}
+              <Link href='/join' prefetch><JoinLink isActive={ router.pathname === '/join' }>Join</JoinLink></Link>
+            </Nav>
+        }
+      </Container>
+    )}
+  </Auth>
+)
 
 
 // Styles
@@ -38,7 +54,6 @@ const LogoLink = styled.a`
 
   &:hover {
     cursor: pointer;
-    svg { transform: scale(1.05) rotate(-2deg); }
   }
 
   &:active {
@@ -74,6 +89,26 @@ const NavLink = styled.a`
   }
 `
 
+const JoinLink = styled.a`
+  transition: ${p => p.theme.transition};
+  color: ${p => p.theme.white};
+  background-image: ${p => p.isActive ? 'transparent' : p.theme.purpleToBlue};
+  background-color: ${p => p.isActive ? p.theme.darkBlue : 'none' };
+  font-weight: 500;
+  border-radius: ${p => p.theme.radius};
+  padding:  0.25rem 0.375rem;
+  line-height: 1;
+  font-size: 1rem;
+  margin: 0 0.625rem;
+
+  &:hover { cursor: pointer; }
+
+  &:active {
+    position: relative;
+    top: 1px;
+  }
+`
+
 const UserLink = styled.a`
   margin-left: 1rem;
 
@@ -91,9 +126,22 @@ const UserLink = styled.a`
 const UserImage = styled.img`
   transition: ${p => p.theme.transition};
   background-color: ${p => p.theme.white};
-  height: 2.5rem;
-  width: 2.5rem;
+  height: 2rem;
+  width: 2rem;
   border-radius: ${p => p.theme.circle};
 `
 
-export default Header
+const UserInitial = styled.div`
+  display: flex;
+  transition: ${p => p.theme.transition};
+  background-color: ${p => p.theme.darkBlue};
+  color: ${p => p.theme.white};
+  height: 2rem;
+  width: 2rem;
+  border-radius: ${p => p.theme.circle};
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+`
+
+export default withRouter(Header)

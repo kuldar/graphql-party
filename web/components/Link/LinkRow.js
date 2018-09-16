@@ -4,36 +4,30 @@ import styled from 'styled-components'
 import { darken } from 'polished'
 
 // Locals
-import LinkVote from './LinkVote'
+import LinkLike from './LinkLike'
+import Arrow from '../../assets/Arrow'
 
 // Link Row
 const LinkRow = ({ link }) => {
-
-  const showLink = (e, id) => {
-    if (e.target.tagName.toLowerCase() !== 'object') {
-      Router.push(`/?id=${id}`, `/link/${id}`)
-    }
-  }
-
-  const { id, likes, isVoted, title, tags, oneliner, comments } = link
+  const { slug, likes, isLiked, title, tags, oneliner, comments } = link
 
   return (
     <LinkContainer>
-      <Link
-        onClick={(e) => showLink(e, id)}
-        href={`/link/${id}`}>
-        <object type="nested/link">
-          <LinkVote
-            linkId={id}
-            votesCount={likes.length}
-            isVoted={isVoted} />
-        </object>
+      <Link href={`/link/${slug}`}>
+        <LinkLike
+          linkSlug={slug}
+          render={({ likeLink }) => (
+            <LikeContainer
+              isLiked={isLiked}
+              onClick={likeLink}>
+              <LikeArrowContainer><Arrow /></LikeArrowContainer>
+              <LikeCount>{likes.length}</LikeCount>
+            </LikeContainer>
+          )} />
         <LinkContent>
           <Top>
             <Title>{title}</Title>
-            <object type="nested/link">
-              <Tags>{ tags.map((tag, i)=> <Tag key={i} href={`/tag/${tag.slug}`}>#{tag.slug}</Tag>) }</Tags>
-            </object>
+            <Tags>{ tags.map((tag, i)=> <Tag key={i} href={`/tag/${tag.slug}`}>#{tag.slug}</Tag>) }</Tags>
           </Top>
           <Bottom>
             <OneLiner>{oneliner}</OneLiner>
@@ -111,6 +105,43 @@ const OneLiner = styled.div`
 const Comments = styled.div`
   transition: ${p => p.theme.transition};
   color: ${p => p.theme.gray3};
+`
+
+const LikeContainer = styled.a`
+  flex-shrink: 0;
+  transition: all .15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 0.5rem;
+  border: 1px solid ${p => p.isLiked ? 'none' : p.theme.gray4};
+  background-image: ${p => p.isLiked ? p.theme.purpleToBlue : 'none' };
+  color: ${p => p.isLiked ? p.theme.white : p.theme.gray3 };
+  border-radius: ${p => p.theme.radius};
+  min-width: 2.5rem;
+  margin-right: 1rem;
+
+  &:hover {
+    transform: translateY(-1px);
+    border: 1px solid ${p => p.isLiked ? 'none' : p.theme.purple};
+    color: ${p => p.isLiked ? p.theme.white : p.theme.purple };
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+`
+
+const LikeArrowContainer = styled.div`
+  svg { display: block; }
+`
+
+const LikeCount = styled.div`
+  margin-top: 0.5rem;
+  font-weight: 500;
+  font-size: 1.125rem;
+  line-height: 1.125rem;
 `
 
 export default LinkRow

@@ -8,15 +8,15 @@ import LinkRow from '../Link/LinkRow'
 import TagLinkListHeader from './TagLinkListHeader'
 
 // Tag Link List
-const TagLinkList = ({ tagId }) => (
+const TagLinkList = ({ tagSlug }) => (
   <Query
     query={linksQuery}
-    variables={{ id: tagId }}>
+    variables={{ slug: tagSlug }}>
     {({ loading, error, data }) => {
       if (loading) return <div>Loading…</div>
       if (error) return <div>Error!</div>
 
-      const { id, slug, title, oneliner, imageUrl, links } = data.tag
+      const { slug, title, oneliner, imageUrl, links } = data.tag
 
       return (
         <Card>
@@ -42,8 +42,8 @@ const Card = styled.div`
 const List = styled.div``
 
 export const linksQuery = gql`
-  query TagLinksQuery($id: ID!) {
-    tag(id: $id) {
+  query TagLinksQuery($slug: String!) {
+    tag(slug: $slug) {
       id
       slug
       title

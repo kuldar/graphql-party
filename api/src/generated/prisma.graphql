@@ -1,5 +1,5 @@
 # source: https://eu1.prisma.sh/kuldar/graphql-party/development
-# timestamp: Thu Aug 16 2018 08:45:32 GMT+0200 (CEST)
+# timestamp: Sun Sep 16 2018 10:21:54 GMT+0200 (CEST)
 
 type AggregateComment {
   count: Int!
@@ -137,8 +137,8 @@ input CommentSubscriptionWhereInput {
 
 input CommentUpdateInput {
   text: String
-  link: LinkUpdateOneWithoutCommentsInput
-  author: UserUpdateOneWithoutCommentsInput
+  link: LinkUpdateOneRequiredWithoutCommentsInput
+  author: UserUpdateOneRequiredWithoutCommentsInput
 }
 
 input CommentUpdateManyWithoutAuthorInput {
@@ -161,12 +161,12 @@ input CommentUpdateManyWithoutLinkInput {
 
 input CommentUpdateWithoutAuthorDataInput {
   text: String
-  link: LinkUpdateOneWithoutCommentsInput
+  link: LinkUpdateOneRequiredWithoutCommentsInput
 }
 
 input CommentUpdateWithoutLinkDataInput {
   text: String
-  author: UserUpdateOneWithoutCommentsInput
+  author: UserUpdateOneRequiredWithoutCommentsInput
 }
 
 input CommentUpdateWithWhereUniqueWithoutAuthorInput {
@@ -415,8 +415,8 @@ input LikeSubscriptionWhereInput {
 }
 
 input LikeUpdateInput {
-  link: LinkUpdateOneWithoutLikesInput
-  user: UserUpdateOneWithoutLikesInput
+  link: LinkUpdateOneRequiredWithoutLikesInput
+  user: UserUpdateOneRequiredWithoutLikesInput
 }
 
 input LikeUpdateManyWithoutLinkInput {
@@ -438,11 +438,11 @@ input LikeUpdateManyWithoutUserInput {
 }
 
 input LikeUpdateWithoutLinkDataInput {
-  user: UserUpdateOneWithoutLikesInput
+  user: UserUpdateOneRequiredWithoutLikesInput
 }
 
 input LikeUpdateWithoutUserDataInput {
-  link: LinkUpdateOneWithoutLikesInput
+  link: LinkUpdateOneRequiredWithoutLikesInput
 }
 
 input LikeUpdateWithWhereUniqueWithoutLinkInput {
@@ -741,7 +741,7 @@ input LinkUpdateInput {
   oneliner: String
   description: String
   readmeUrl: String
-  author: UserUpdateOneWithoutLinksInput
+  author: UserUpdateOneRequiredWithoutLinksInput
   tags: TagUpdateManyWithoutLinksInput
   likes: LikeUpdateManyWithoutLinkInput
   comments: CommentUpdateManyWithoutLinkInput
@@ -765,18 +765,16 @@ input LinkUpdateManyWithoutTagsInput {
   upsert: [LinkUpsertWithWhereUniqueWithoutTagsInput!]
 }
 
-input LinkUpdateOneWithoutCommentsInput {
+input LinkUpdateOneRequiredWithoutCommentsInput {
   create: LinkCreateWithoutCommentsInput
   connect: LinkWhereUniqueInput
-  delete: Boolean
   update: LinkUpdateWithoutCommentsDataInput
   upsert: LinkUpsertWithoutCommentsInput
 }
 
-input LinkUpdateOneWithoutLikesInput {
+input LinkUpdateOneRequiredWithoutLikesInput {
   create: LinkCreateWithoutLikesInput
   connect: LinkWhereUniqueInput
-  delete: Boolean
   update: LinkUpdateWithoutLikesDataInput
   upsert: LinkUpsertWithoutLikesInput
 }
@@ -800,7 +798,7 @@ input LinkUpdateWithoutCommentsDataInput {
   oneliner: String
   description: String
   readmeUrl: String
-  author: UserUpdateOneWithoutLinksInput
+  author: UserUpdateOneRequiredWithoutLinksInput
   tags: TagUpdateManyWithoutLinksInput
   likes: LikeUpdateManyWithoutLinkInput
 }
@@ -812,7 +810,7 @@ input LinkUpdateWithoutLikesDataInput {
   oneliner: String
   description: String
   readmeUrl: String
-  author: UserUpdateOneWithoutLinksInput
+  author: UserUpdateOneRequiredWithoutLinksInput
   tags: TagUpdateManyWithoutLinksInput
   comments: CommentUpdateManyWithoutLinkInput
 }
@@ -824,7 +822,7 @@ input LinkUpdateWithoutTagsDataInput {
   oneliner: String
   description: String
   readmeUrl: String
-  author: UserUpdateOneWithoutLinksInput
+  author: UserUpdateOneRequiredWithoutLinksInput
   likes: LikeUpdateManyWithoutLinkInput
   comments: CommentUpdateManyWithoutLinkInput
 }
@@ -1725,9 +1723,12 @@ input TagWhereUniqueInput {
 
 type User implements Node {
   id: ID!
-  name: String!
   email: String!
+  password: String!
+  name: String!
   imageUrl: String
+  resetToken: String
+  resetTokenExpiry: String
   links(where: LinkWhereInput, orderBy: LinkOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Link!]
   likes(where: LikeWhereInput, orderBy: LikeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Like!]
   comments(where: CommentWhereInput, orderBy: CommentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Comment!]
@@ -1746,9 +1747,12 @@ type UserConnection {
 }
 
 input UserCreateInput {
-  name: String!
   email: String!
+  password: String!
+  name: String!
   imageUrl: String
+  resetToken: String
+  resetTokenExpiry: String
   links: LinkCreateManyWithoutAuthorInput
   likes: LikeCreateManyWithoutUserInput
   comments: CommentCreateManyWithoutAuthorInput
@@ -1770,25 +1774,34 @@ input UserCreateOneWithoutLinksInput {
 }
 
 input UserCreateWithoutCommentsInput {
-  name: String!
   email: String!
+  password: String!
+  name: String!
   imageUrl: String
+  resetToken: String
+  resetTokenExpiry: String
   links: LinkCreateManyWithoutAuthorInput
   likes: LikeCreateManyWithoutUserInput
 }
 
 input UserCreateWithoutLikesInput {
-  name: String!
   email: String!
+  password: String!
+  name: String!
   imageUrl: String
+  resetToken: String
+  resetTokenExpiry: String
   links: LinkCreateManyWithoutAuthorInput
   comments: CommentCreateManyWithoutAuthorInput
 }
 
 input UserCreateWithoutLinksInput {
-  name: String!
   email: String!
+  password: String!
+  name: String!
   imageUrl: String
+  resetToken: String
+  resetTokenExpiry: String
   likes: LikeCreateManyWithoutUserInput
   comments: CommentCreateManyWithoutAuthorInput
 }
@@ -1805,12 +1818,18 @@ type UserEdge {
 enum UserOrderByInput {
   id_ASC
   id_DESC
-  name_ASC
-  name_DESC
   email_ASC
   email_DESC
+  password_ASC
+  password_DESC
+  name_ASC
+  name_DESC
   imageUrl_ASC
   imageUrl_DESC
+  resetToken_ASC
+  resetToken_DESC
+  resetTokenExpiry_ASC
+  resetTokenExpiry_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -1819,9 +1838,12 @@ enum UserOrderByInput {
 
 type UserPreviousValues {
   id: ID!
-  name: String!
   email: String!
+  password: String!
+  name: String!
   imageUrl: String
+  resetToken: String
+  resetTokenExpiry: String
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -1866,58 +1888,67 @@ input UserSubscriptionWhereInput {
 }
 
 input UserUpdateInput {
-  name: String
   email: String
+  password: String
+  name: String
   imageUrl: String
+  resetToken: String
+  resetTokenExpiry: String
   links: LinkUpdateManyWithoutAuthorInput
   likes: LikeUpdateManyWithoutUserInput
   comments: CommentUpdateManyWithoutAuthorInput
 }
 
-input UserUpdateOneWithoutCommentsInput {
+input UserUpdateOneRequiredWithoutCommentsInput {
   create: UserCreateWithoutCommentsInput
   connect: UserWhereUniqueInput
-  delete: Boolean
   update: UserUpdateWithoutCommentsDataInput
   upsert: UserUpsertWithoutCommentsInput
 }
 
-input UserUpdateOneWithoutLikesInput {
+input UserUpdateOneRequiredWithoutLikesInput {
   create: UserCreateWithoutLikesInput
   connect: UserWhereUniqueInput
-  delete: Boolean
   update: UserUpdateWithoutLikesDataInput
   upsert: UserUpsertWithoutLikesInput
 }
 
-input UserUpdateOneWithoutLinksInput {
+input UserUpdateOneRequiredWithoutLinksInput {
   create: UserCreateWithoutLinksInput
   connect: UserWhereUniqueInput
-  delete: Boolean
   update: UserUpdateWithoutLinksDataInput
   upsert: UserUpsertWithoutLinksInput
 }
 
 input UserUpdateWithoutCommentsDataInput {
-  name: String
   email: String
+  password: String
+  name: String
   imageUrl: String
+  resetToken: String
+  resetTokenExpiry: String
   links: LinkUpdateManyWithoutAuthorInput
   likes: LikeUpdateManyWithoutUserInput
 }
 
 input UserUpdateWithoutLikesDataInput {
-  name: String
   email: String
+  password: String
+  name: String
   imageUrl: String
+  resetToken: String
+  resetTokenExpiry: String
   links: LinkUpdateManyWithoutAuthorInput
   comments: CommentUpdateManyWithoutAuthorInput
 }
 
 input UserUpdateWithoutLinksDataInput {
-  name: String
   email: String
+  password: String
+  name: String
   imageUrl: String
+  resetToken: String
+  resetTokenExpiry: String
   likes: LikeUpdateManyWithoutUserInput
   comments: CommentUpdateManyWithoutAuthorInput
 }
@@ -1986,46 +2017,6 @@ input UserWhereInput {
 
   """All values not ending with the given string."""
   id_not_ends_with: ID
-  name: String
-
-  """All values that are not equal to given value."""
-  name_not: String
-
-  """All values that are contained in given list."""
-  name_in: [String!]
-
-  """All values that are not contained in given list."""
-  name_not_in: [String!]
-
-  """All values less than the given value."""
-  name_lt: String
-
-  """All values less than or equal the given value."""
-  name_lte: String
-
-  """All values greater than the given value."""
-  name_gt: String
-
-  """All values greater than or equal the given value."""
-  name_gte: String
-
-  """All values containing the given string."""
-  name_contains: String
-
-  """All values not containing the given string."""
-  name_not_contains: String
-
-  """All values starting with the given string."""
-  name_starts_with: String
-
-  """All values not starting with the given string."""
-  name_not_starts_with: String
-
-  """All values ending with the given string."""
-  name_ends_with: String
-
-  """All values not ending with the given string."""
-  name_not_ends_with: String
   email: String
 
   """All values that are not equal to given value."""
@@ -2066,6 +2057,86 @@ input UserWhereInput {
 
   """All values not ending with the given string."""
   email_not_ends_with: String
+  password: String
+
+  """All values that are not equal to given value."""
+  password_not: String
+
+  """All values that are contained in given list."""
+  password_in: [String!]
+
+  """All values that are not contained in given list."""
+  password_not_in: [String!]
+
+  """All values less than the given value."""
+  password_lt: String
+
+  """All values less than or equal the given value."""
+  password_lte: String
+
+  """All values greater than the given value."""
+  password_gt: String
+
+  """All values greater than or equal the given value."""
+  password_gte: String
+
+  """All values containing the given string."""
+  password_contains: String
+
+  """All values not containing the given string."""
+  password_not_contains: String
+
+  """All values starting with the given string."""
+  password_starts_with: String
+
+  """All values not starting with the given string."""
+  password_not_starts_with: String
+
+  """All values ending with the given string."""
+  password_ends_with: String
+
+  """All values not ending with the given string."""
+  password_not_ends_with: String
+  name: String
+
+  """All values that are not equal to given value."""
+  name_not: String
+
+  """All values that are contained in given list."""
+  name_in: [String!]
+
+  """All values that are not contained in given list."""
+  name_not_in: [String!]
+
+  """All values less than the given value."""
+  name_lt: String
+
+  """All values less than or equal the given value."""
+  name_lte: String
+
+  """All values greater than the given value."""
+  name_gt: String
+
+  """All values greater than or equal the given value."""
+  name_gte: String
+
+  """All values containing the given string."""
+  name_contains: String
+
+  """All values not containing the given string."""
+  name_not_contains: String
+
+  """All values starting with the given string."""
+  name_starts_with: String
+
+  """All values not starting with the given string."""
+  name_not_starts_with: String
+
+  """All values ending with the given string."""
+  name_ends_with: String
+
+  """All values not ending with the given string."""
+  name_not_ends_with: String
   imageUrl: String
 
   """All values that are not equal to given value."""
@@ -2106,6 +2177,86 @@ input UserWhereInput {
 
   """All values not ending with the given string."""
   imageUrl_not_ends_with: String
+  resetToken: String
+
+  """All values that are not equal to given value."""
+  resetToken_not: String
+
+  """All values that are contained in given list."""
+  resetToken_in: [String!]
+
+  """All values that are not contained in given list."""
+  resetToken_not_in: [String!]
+
+  """All values less than the given value."""
+  resetToken_lt: String
+
+  """All values less than or equal the given value."""
+  resetToken_lte: String
+
+  """All values greater than the given value."""
+  resetToken_gt: String
+
+  """All values greater than or equal the given value."""
+  resetToken_gte: String
+
+  """All values containing the given string."""
+  resetToken_contains: String
+
+  """All values not containing the given string."""
+  resetToken_not_contains: String
+
+  """All values starting with the given string."""
+  resetToken_starts_with: String
+
+  """All values not starting with the given string."""
+  resetToken_not_starts_with: String
+
+  """All values ending with the given string."""
+  resetToken_ends_with: String
+
+  """All values not ending with the given string."""
+  resetToken_not_ends_with: String
+  resetTokenExpiry: String
+
+  """All values that are not equal to given value."""
+  resetTokenExpiry_not: String
+
+  """All values that are contained in given list."""
+  resetTokenExpiry_in: [String!]
+
+  """All values that are not contained in given list."""
+  resetTokenExpiry_not_in: [String!]
+
+  """All values less than the given value."""
+  resetTokenExpiry_lt: String
+
+  """All values less than or equal the given value."""
+  resetTokenExpiry_lte: String
+
+  """All values greater than the given value."""
+  resetTokenExpiry_gt: String
+
+  """All values greater than or equal the given value."""
+  resetTokenExpiry_gte: String
+
+  """All values containing the given string."""
+  resetTokenExpiry_contains: String
+
+  """All values not containing the given string."""
+  resetTokenExpiry_not_contains: String
+
+  """All values starting with the given string."""
+  resetTokenExpiry_starts_with: String
+
+  """All values not starting with the given string."""
+  resetTokenExpiry_not_starts_with: String
+
+  """All values ending with the given string."""
+  resetTokenExpiry_ends_with: String
+
+  """All values not ending with the given string."""
+  resetTokenExpiry_not_ends_with: String
   createdAt: DateTime
 
   """All values that are not equal to given value."""

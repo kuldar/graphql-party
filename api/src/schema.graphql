@@ -1,22 +1,80 @@
-# import Link, Tag from "./generated/prisma.graphql"
+# import Link, Tag, Like, Comment from "./generated/prisma.graphql"
 
 type Query {
+  me: User
+
   links: [Link!]!
-  link(id: ID!): Link
+  link(slug: String!): Link
 
   tags: [Tag!]!
-  tag(id: ID!): Tag
-  # me: User
+  tag(slug: String!): Tag
 }
 
-# type User {
-#   id: ID!
-#   name: String!
-#   email: String!
-#   imageUrl: String!
-# }
+type Mutation {
+
+  signup(
+    email: String!,
+    password: String!,
+    name: String!
+  ): User!
+  signin(
+    email: String!,
+    password: String!
+  ): User!
+  signout: SuccessMessage
+  updateUser(name: String): User
+
+  requestReset(email: String!): User
+  resetPassword(
+    resetToken: String!,
+    password: String!,
+    confirmPassword: String!
+  ): User!
+
+  createLink(
+    title: String!,
+    url: String!,
+    oneliner: String!,
+    description: String,
+    readmeUrl: String
+  ): Link!
+  updateLink(
+    slug: String!,
+    title: String!,
+    url: String!,
+    oneliner: String!,
+    description: String,
+    readmeUrl: String
+  ): Link!
+  deleteLink(slug: String!): Link!
+  likeLink(slug: String!): Like!
+  unlikeLink(slug: String!): Like!
+
+  createComment(
+    text: String!,
+    authorId: ID!,
+    linkSlug: String!
+  ): Comment!
+  deleteComment(id: ID!): Comment
+
+}
+
+type SuccessMessage {
+  message: String
+}
 
 # type AuthPayload {
 #   token: String!
 #   user: User!
 # }
+
+type User {
+  id: ID!
+  email: String!
+  name: String!
+  imageUrl: String
+
+  links: [Link!]!
+  likes: [Like!]!
+  comments: [Comment!]!
+}

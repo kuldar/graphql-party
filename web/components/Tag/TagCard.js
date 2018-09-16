@@ -6,11 +6,11 @@ import { darken } from 'polished'
 // Tag Card
 const TagCard = ({ tag }) => {
 
-  const { id, title, oneliner, imageUrl } = tag
+  const { slug, title, oneliner, imageUrl } = tag
 
   return (
     <Container>
-      <Tag href={`/tag/${id}`}>
+      <Tag href={`/tag/${slug}`}>
         <TagIcon src={imageUrl} />
         <TagHeader>
           <Title>{title}</Title>

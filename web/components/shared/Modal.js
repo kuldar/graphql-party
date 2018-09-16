@@ -27,7 +27,7 @@ class Modal extends Component {
         innerRef={this.overlay}
         onClick={(e) => this.dismiss(e)}>
         <Container innerRef={this.container}>
-          <LinkCard linkId={this.props.linkId} />
+          <LinkCard linkSlug={this.props.linkSlug} />
         </Container>
       </Overlay>
     )

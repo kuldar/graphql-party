@@ -7,6 +7,7 @@ import styled from 'styled-components'
 // Locals
 import Header from '../components/shared/Header'
 import Footer from '../components/shared/Footer'
+import LinkForm from '../components/Link/LinkForm'
 import Nachos from '../assets/Nachos'
 import { site } from '../utils/variables'
 
@@ -26,7 +27,7 @@ class NewLink extends Component {
           </HeaderContainer>
 
           <Main>
-            New Link Form
+            <LinkForm />
           </Main>
 
           <FooterContainer>

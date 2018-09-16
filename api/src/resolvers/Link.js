@@ -1,3 +1,6 @@
+// Libraries
+const slugify = require('slugify')
+
 // Link resolvers
 const Link = {
 
@@ -10,9 +13,29 @@ const Link = {
     },
 
     // Link
-    link(parent, { id }, ctx, info) {
-      return ctx.db.query.link({ where: { id: id } }, info)
+    link(parent, { slug }, ctx, info) {
+      return ctx.db.query.link({ where: { slug: slug } }, info)
     }
+  },
+
+  Mutation: {
+
+    // Create a new link
+    async createLink(parent, args, ctx, info) {
+      if (!ctx.request.userId) throw new Error('You must be logged in...')
+
+      const link = await ctx.db.mutation.createLink(
+        { data: {
+            author: { connect: { id: ctx.request.userId }},
+            slug: slugify(args.title, { replacement: '-', lower: true }),
+            ...args
+        }},
+        info
+      )
+
+      return link
+    }
+
   }
 
 }

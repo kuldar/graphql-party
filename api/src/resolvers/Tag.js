@@ -10,8 +10,8 @@ const Tag = {
     },
 
     // Tag
-    tag(parent, { id }, ctx, info) {
-      return ctx.db.query.tag({ where: { id: id } }, info)
+    tag(parent, { slug }, ctx, info) {
+      return ctx.db.query.tag({ where: { slug: slug } }, info)
     }
   }
 

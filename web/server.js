@@ -16,20 +16,28 @@ app.prepare()
       return app.render(req, res, '/links', req.query)
     })
 
+    server.get('/join', (req, res) => {
+      return app.render(req, res, '/join', req.query)
+    })
+
+    server.get('/profile', (req, res) => {
+      return app.render(req, res, '/profile', req.query)
+    })
+
     server.get('/link/new', (req, res) => {
       return app.render(req, res, '/newLink', req.query)
     })
 
-    server.get('/link/:id', (req, res) => {
-      return app.render(req, res, '/link', { id: req.params.id })
+    server.get('/link/:slug', (req, res) => {
+      return app.render(req, res, '/link', { slug: req.params.slug })
     })
 
     server.get('/tags', (req, res) => {
       return app.render(req, res, '/tags', req.query)
     })
 
-    server.get('/tag/:id', (req, res) => {
-      return app.render(req, res, '/tag', { id: req.params.id })
+    server.get('/tag/:slug', (req, res) => {
+      return app.render(req, res, '/tag', { slug: req.params.slug })
     })
 
     server.get('*', (req, res) => {

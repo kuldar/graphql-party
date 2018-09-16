@@ -6,6 +6,7 @@ import Link from 'next/link'
 const Footer = () => {
   return (
     <Container>
+      <FooterLink href="https://twitter.com/graphqlparty">@graphqlparty</FooterLink>
       <FooterLink href="https://twitter.com/kkuldar">
         by <img src='https://cdn.pbrd.co/images/HupyS9O.png' /> Kuldar
       </FooterLink>
@@ -17,7 +18,8 @@ const Footer = () => {
 // Styles
 const Container = styled.div`
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
 `
 
 const FooterLink = styled.a`

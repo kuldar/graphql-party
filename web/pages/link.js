@@ -14,8 +14,8 @@ import { site } from '../utils/variables'
 // Link
 class Link extends Component {
 
-  static getInitialProps ({ query: { id } }) {
-    return { linkId: id }
+  static getInitialProps ({ query: { slug } }) {
+    return { linkSlug: slug }
   }
 
   constructor (props) {
@@ -23,7 +23,7 @@ class Link extends Component {
   }
 
   render () {
-    const { linkId } = this.props
+    const { linkSlug } = this.props
 
     return (
       <div>
@@ -38,7 +38,7 @@ class Link extends Component {
           </HeaderContainer>
 
           <CardContainer>
-            <LinkCard linkId={linkId} />
+            <LinkCard linkSlug={linkSlug} />
           </CardContainer>
 
           <NachosContainer>
